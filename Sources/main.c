@@ -45,14 +45,16 @@ int main(void)
 	config.channel 				 		= DMA_CHANNEL_0;
 	config.source_address 		 		= (uint32_t *)&ADC0_RA;
 	config.destination_address 	 		= (uint32_t *)&vetor_adc;
-	config.number_byte 			 		= DMA_SIZE_16_BIT;
-	config.cycle_steal                  = 0;
-	config.destination_increment 		= 0;
+	config.number_byte 			 		= 16;
+	config.cycle_steal                  = DMA_FORCES_SINGLE;
+	config.destination_increment 		= DMA_DESTINATION_INCREMENT;
 	config.destination_size 	 		= DMA_SIZE_16_BIT;
 	config.source_size 					= DMA_SIZE_16_BIT;
-	config.destination_address_modulo 	= 0;
-	config.source_address_modulo 		= 0;
+	config.destination_address_modulo 	= DMA_BUFFER_SIZE_16_BYTE;
+	config.source_address_modulo 		= DMA_BUFFER_SIZE_16_BYTE;
 	config.channel_source 				= DMA_ADC0;
+	config.peripheral_request 			= 1;
+	config.start_transfer               = 0;
 
 	dma_init(&config);
 
@@ -63,7 +65,7 @@ int main(void)
     for (;;)
     {
         i++;
-        if(i>1000)
+        if(i>100)
         {
         	i = 0;
         	//start conversion with channel 8 PTB0
@@ -78,6 +80,8 @@ void processes_adc_data(void)
 {
 	uint32_t average_adc = 0;
 	uint8_t i = 0;
+
+	//DMA_DSR_BCR0 |= DMA_DSR_BCR_BCR(16);		// Set byte count register
 
 	for(i=0;i<8;i++)
 	{

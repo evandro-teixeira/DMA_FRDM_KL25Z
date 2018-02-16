@@ -75,6 +75,8 @@
 #define DMA_TPM2_OVERFLOW				56
 #define DMA_TSI							57
 
+#define DMA_CONTINUOUSLY_TRANSFERS		0
+#define DMA_FORCES_SINGLE				1
 
 typedef struct
 {
@@ -89,6 +91,8 @@ typedef struct
 	uint8_t destination_address_modulo;
 	uint8_t source_address_modulo;
 	uint8_t cycle_steal;
+	uint8_t peripheral_request;
+	uint8_t start_transfer;
 }dma_config_t;
 
 void dma_init(dma_config_t *config);
